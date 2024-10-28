@@ -5,9 +5,7 @@ import React from "react"
 
 import { cx } from "@/lib/utils"
 
-const Popover = (
-  props: React.ComponentPropsWithoutRef<typeof PopoverPrimitives.Root>,
-) => {
+const Popover = (props: React.ComponentPropsWithoutRef<typeof PopoverPrimitives.Root>) => {
   return <PopoverPrimitives.Root {...props} />
 }
 
@@ -40,13 +38,9 @@ const PopoverClose = React.forwardRef<
 
 PopoverClose.displayName = "PopoverClose"
 
-interface ContentProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitives.Content> {}
+interface ContentProps extends React.ComponentPropsWithoutRef<typeof PopoverPrimitives.Content> {}
 
-const PopoverContent = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitives.Content>,
-  ContentProps
->(
+const PopoverContent = React.forwardRef<React.ElementRef<typeof PopoverPrimitives.Content>, ContentProps>(
   (
     {
       className,
@@ -89,13 +83,9 @@ const PopoverContent = React.forwardRef<
             event.stopPropagation()
             const isScrollingDown = event.deltaY > 0
             if (isScrollingDown) {
-              event.currentTarget.dispatchEvent(
-                new KeyboardEvent("keydown", { key: "ArrowDown" }),
-              )
+              event.currentTarget.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }))
             } else {
-              event.currentTarget.dispatchEvent(
-                new KeyboardEvent("keydown", { key: "ArrowUp" }),
-              )
+              event.currentTarget.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp" }))
             }
           }}
           {...props}

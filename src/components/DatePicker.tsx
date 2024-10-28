@@ -4,19 +4,10 @@
 
 import { Time } from "@internationalized/date"
 import * as PopoverPrimitives from "@radix-ui/react-popover"
-import {
-  AriaTimeFieldProps,
-  TimeValue,
-  useDateSegment,
-  useTimeField,
-} from "@react-aria/datepicker"
-import {
-  useTimeFieldState,
-  type DateFieldState,
-  type DateSegment,
-} from "@react-stately/datepicker"
+import { AriaTimeFieldProps, TimeValue, useDateSegment, useTimeField } from "@react-aria/datepicker"
+import { type DateFieldState, type DateSegment, useTimeFieldState } from "@react-stately/datepicker"
 import { RiCalendar2Fill, RiSubtractFill } from "@remixicon/react"
-import { format, type Locale } from "date-fns"
+import { type Locale, format } from "date-fns"
 import { enUS } from "date-fns/locale"
 import * as React from "react"
 import { VariantProps, tv } from "tailwind-variants"
@@ -30,8 +21,7 @@ import { Calendar as CalendarPrimitive, type Matcher } from "./Calendar"
 // ============================================================================
 
 const isBrowserLocaleClockType24h = () => {
-  const language =
-    typeof window !== "undefined" ? window.navigator.language : "en-US"
+  const language = typeof window !== "undefined" ? window.navigator.language : "en-US"
 
   const hr = new Intl.DateTimeFormat(language, {
     hour: "numeric",
@@ -73,8 +63,7 @@ const TimeSegment = ({ segment, state }: TimeSegmentProps) => {
         // invalid (optional)
         "invalid:border-red-500 invalid:ring-2 invalid:ring-red-200 group-aria-[invalid=true]/time-input:border-red-500 group-aria-[invalid=true]/time-input:ring-2 group-aria-[invalid=true]/time-input:ring-red-200 group-aria-[invalid=true]/time-input:dark:ring-red-400/20",
         {
-          "!w-fit border-none bg-transparent px-0 text-gray-400 shadow-none":
-            isDecorator,
+          "!w-fit border-none bg-transparent px-0 text-gray-400 shadow-none": isDecorator,
           hidden: isSpace,
           "border-gray-200 bg-gray-100 text-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500":
             state.isDisabled,
@@ -84,13 +73,10 @@ const TimeSegment = ({ segment, state }: TimeSegmentProps) => {
     >
       <span
         aria-hidden="true"
-        className={cx(
-          "pointer-events-none block w-full text-left text-gray-700 sm:text-sm",
-          {
-            hidden: !segment.isPlaceholder,
-            "h-0": !segment.isPlaceholder,
-          },
-        )}
+        className={cx("pointer-events-none block w-full text-left text-gray-700 sm:text-sm", {
+          hidden: !segment.isPlaceholder,
+          "h-0": !segment.isPlaceholder,
+        })}
       >
         {segment.placeholder}
       </span>
@@ -104,48 +90,39 @@ type TimeInputProps = Omit<
   "label" | "shouldForceLeadingZeros" | "description" | "errorMessage"
 >
 
-const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
-  ({ hourCycle, ...props }: TimeInputProps, ref) => {
-    const innerRef = React.useRef<HTMLDivElement>(null)
+const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(({ hourCycle, ...props }: TimeInputProps, ref) => {
+  const innerRef = React.useRef<HTMLDivElement>(null)
 
-    React.useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(
-      ref,
-      () => innerRef?.current,
-    )
+  React.useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => innerRef?.current)
 
-    const locale = window !== undefined ? window.navigator.language : "en-US"
+  const locale = window !== undefined ? window.navigator.language : "en-US"
 
-    const state = useTimeFieldState({
-      hourCycle: hourCycle,
-      locale: locale,
-      shouldForceLeadingZeros: true,
-      autoFocus: true,
+  const state = useTimeFieldState({
+    hourCycle: hourCycle,
+    locale: locale,
+    shouldForceLeadingZeros: true,
+    autoFocus: true,
+    ...props,
+  })
+
+  const { fieldProps } = useTimeField(
+    {
       ...props,
-    })
+      hourCycle: hourCycle,
+      shouldForceLeadingZeros: true,
+    },
+    state,
+    innerRef,
+  )
 
-    const { fieldProps } = useTimeField(
-      {
-        ...props,
-        hourCycle: hourCycle,
-        shouldForceLeadingZeros: true,
-      },
-      state,
-      innerRef,
-    )
-
-    return (
-      <div
-        {...fieldProps}
-        ref={innerRef}
-        className="group/time-input inline-flex w-full gap-x-2"
-      >
-        {state.segments.map((segment, i) => (
-          <TimeSegment key={i} segment={segment} state={state} />
-        ))}
-      </div>
-    )
-  },
-)
+  return (
+    <div {...fieldProps} ref={innerRef} className="group/time-input inline-flex w-full gap-x-2">
+      {state.segments.map((segment, i) => (
+        <TimeSegment key={i} segment={segment} state={state} />
+      ))}
+    </div>
+  )
+})
 TimeInput.displayName = "TimeInput"
 
 //#region Trigger
@@ -181,32 +158,21 @@ const triggerStyles = tv({
   },
 })
 
-interface TriggerProps
-  extends React.ComponentProps<"button">,
-    VariantProps<typeof triggerStyles> {
+interface TriggerProps extends React.ComponentProps<"button">, VariantProps<typeof triggerStyles> {
   placeholder?: string
 }
 
 const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
-  (
-    { className, children, placeholder, hasError, ...props }: TriggerProps,
-    forwardedRef,
-  ) => {
+  ({ className, children, placeholder, hasError, ...props }: TriggerProps, forwardedRef) => {
     return (
       <PopoverPrimitives.Trigger asChild>
-        <button
-          ref={forwardedRef}
-          className={cx(triggerStyles({ hasError }), className)}
-          {...props}
-        >
+        <button ref={forwardedRef} className={cx(triggerStyles({ hasError }), className)} {...props}>
           <RiCalendar2Fill className="size-4 shrink-0 text-gray-400 dark:text-gray-600" />
           <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left text-gray-900 dark:text-gray-50">
             {children ? (
               children
             ) : placeholder ? (
-              <span className="text-gray-400 dark:text-gray-600">
-                {placeholder}
-              </span>
+              <span className="text-gray-400 dark:text-gray-600">{placeholder}</span>
             ) : null}
           </span>
         </button>
@@ -400,11 +366,7 @@ PresetContainer.displayName = "DatePicker.PresetContainer"
 //#region Date Picker Shared
 // ============================================================================
 
-const formatDate = (
-  date: Date,
-  locale: Locale,
-  includeTime?: boolean,
-): string => {
+const formatDate = (date: Date, locale: Locale, includeTime?: boolean): string => {
   const usesAmPm = !isBrowserLocaleClockType24h()
   let dateString: string
 
@@ -489,9 +451,7 @@ const SingleDatePicker = ({
   ...props
 }: SingleProps) => {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(
-    value ?? defaultValue ?? undefined,
-  )
+  const [date, setDate] = React.useState<Date | undefined>(value ?? defaultValue ?? undefined)
   const [month, setMonth] = React.useState<Date | undefined>(date)
 
   const [time, setTime] = React.useState<TimeValue>(
@@ -526,11 +486,7 @@ const SingleDatePicker = ({
 
   const onCancel = () => {
     setDate(initialDate)
-    setTime(
-      initialDate
-        ? new Time(initialDate.getHours(), initialDate.getMinutes())
-        : new Time(0, 0),
-    )
+    setTime(initialDate ? new Time(initialDate.getHours(), initialDate.getMinutes()) : new Time(0, 0))
     setOpen(false)
   }
 
@@ -626,11 +582,7 @@ const SingleDatePicker = ({
                 )}
               >
                 <div className="absolute px-2 pr-2 sm:inset-0 sm:left-0 sm:py-2">
-                  <PresetContainer
-                    currentValue={date}
-                    presets={presets}
-                    onSelect={onDateChange}
-                  />
+                  <PresetContainer currentValue={date} presets={presets} onSelect={onDateChange} />
                 </div>
               </div>
             )}
@@ -660,20 +612,10 @@ const SingleDatePicker = ({
                 </div>
               )}
               <div className="flex items-center gap-x-2 border-t border-gray-200 p-3 dark:border-gray-800">
-                <Button
-                  variant="secondary"
-                  className="h-8 w-full"
-                  type="button"
-                  onClick={onCancel}
-                >
+                <Button variant="secondary" className="h-8 w-full" type="button" onClick={onCancel}>
                   {translations?.cancel ?? "Cancel"}
                 </Button>
-                <Button
-                  variant="primary"
-                  className="h-8 w-full"
-                  type="button"
-                  onClick={onApply}
-                >
+                <Button variant="primary" className="h-8 w-full" type="button" onClick={onApply}>
                   {translations?.apply ?? "Apply"}
                 </Button>
               </div>
@@ -714,9 +656,7 @@ const RangeDatePicker = ({
   ...props
 }: RangeProps) => {
   const [open, setOpen] = React.useState(false)
-  const [range, setRange] = React.useState<DateRange | undefined>(
-    value ?? defaultValue ?? undefined,
-  )
+  const [range, setRange] = React.useState<DateRange | undefined>(value ?? defaultValue ?? undefined)
   const [month, setMonth] = React.useState<Date | undefined>(range?.from)
 
   const [startTime, setStartTime] = React.useState<TimeValue>(
@@ -784,15 +724,9 @@ const RangeDatePicker = ({
   const onCancel = () => {
     setRange(initialRange)
     setStartTime(
-      initialRange?.from
-        ? new Time(initialRange.from.getHours(), initialRange.from.getMinutes())
-        : new Time(0, 0),
+      initialRange?.from ? new Time(initialRange.from.getHours(), initialRange.from.getMinutes()) : new Time(0, 0),
     )
-    setEndTime(
-      initialRange?.to
-        ? new Time(initialRange.to.getHours(), initialRange.to.getMinutes())
-        : new Time(0, 0),
-    )
+    setEndTime(initialRange?.to ? new Time(initialRange.to.getHours(), initialRange.to.getMinutes()) : new Time(0, 0))
     setOpen(false)
   }
 
@@ -868,10 +802,7 @@ const RangeDatePicker = ({
       value?.from
         ? new Time(value.from.getHours(), value.from.getMinutes())
         : defaultValue?.from
-          ? new Time(
-              defaultValue.from.getHours(),
-              defaultValue.from.getMinutes(),
-            )
+          ? new Time(defaultValue.from.getHours(), defaultValue.from.getMinutes())
           : new Time(0, 0),
     )
     setEndTime(
@@ -924,11 +855,7 @@ const RangeDatePicker = ({
                 )}
               >
                 <div className="absolute px-3 sm:inset-0 sm:left-0 sm:p-2">
-                  <PresetContainer
-                    currentValue={range}
-                    presets={presets}
-                    onSelect={onRangeChange}
-                  />
+                  <PresetContainer currentValue={range} presets={presets} onSelect={onRangeChange} />
                 </div>
               </div>
             )}
@@ -946,17 +873,14 @@ const RangeDatePicker = ({
                 locale={locale}
                 initialFocus
                 classNames={{
-                  months:
-                    "flex flex-row divide-x divide-gray-200 dark:divide-gray-800 overflow-x-auto",
+                  months: "flex flex-row divide-x divide-gray-200 dark:divide-gray-800 overflow-x-auto",
                 }}
                 {...props}
               />
               {showTimePicker && (
                 <div className="flex items-center justify-evenly gap-x-3 border-t border-gray-200 p-3 dark:border-gray-800">
                   <div className="flex flex-1 items-center gap-x-2">
-                    <span className="dark:text-gray-30 text-gray-700">
-                      {translations?.start ?? "Start"}:
-                    </span>
+                    <span className="dark:text-gray-30 text-gray-700">{translations?.start ?? "Start"}:</span>
                     <TimeInput
                       value={startTime}
                       onChange={(v) => onTimeChange(v, "start")}
@@ -967,9 +891,7 @@ const RangeDatePicker = ({
                   </div>
                   <RiSubtractFill className="size-4 shrink-0 text-gray-400" />
                   <div className="flex flex-1 items-center gap-x-2">
-                    <span className="dark:text-gray-30 text-gray-700">
-                      {translations?.end ?? "End"}:
-                    </span>
+                    <span className="dark:text-gray-30 text-gray-700">{translations?.end ?? "End"}:</span>
                     <TimeInput
                       value={endTime}
                       onChange={(v) => onTimeChange(v, "end")}
@@ -982,18 +904,11 @@ const RangeDatePicker = ({
               )}
               <div className="border-t border-gray-200 p-3 sm:flex sm:items-center sm:justify-between dark:border-gray-800">
                 <p className="tabular-nums text-gray-900 dark:text-gray-50">
-                  <span className="text-gray-700 dark:text-gray-300">
-                    {translations?.range ?? "Range"}:
-                  </span>{" "}
+                  <span className="text-gray-700 dark:text-gray-300">{translations?.range ?? "Range"}:</span>{" "}
                   <span className="font-medium">{displayRange}</span>
                 </p>
                 <div className="mt-2 flex items-center gap-x-2 sm:mt-0">
-                  <Button
-                    variant="secondary"
-                    className="h-8 w-full sm:w-fit"
-                    type="button"
-                    onClick={onCancel}
-                  >
+                  <Button variant="secondary" className="h-8 w-full sm:w-fit" type="button" onClick={onCancel}>
                     {translations?.cancel ?? "Cancel"}
                   </Button>
                   <Button
@@ -1017,10 +932,7 @@ const RangeDatePicker = ({
 //#region Preset Validation
 // ============================================================================
 
-const validatePresets = (
-  presets: DateRangePreset[] | DatePreset[],
-  rules: PickerProps,
-) => {
+const validatePresets = (presets: DateRangePreset[] | DatePreset[], rules: PickerProps) => {
   const { toYear, fromYear, fromMonth, toMonth, fromDay, toDay } = rules
 
   if (presets && presets.length > 0) {
@@ -1032,24 +944,18 @@ const validatePresets = (
         const presetYear = preset.date.getFullYear()
 
         if (fromYear && presetYear < fromYear) {
-          throw new Error(
-            `Preset ${preset.label} is before fromYear ${fromYearToUse}.`,
-          )
+          throw new Error(`Preset ${preset.label} is before fromYear ${fromYearToUse}.`)
         }
 
         if (toYear && presetYear > toYear) {
-          throw new Error(
-            `Preset ${preset.label} is after toYear ${toYearToUse}.`,
-          )
+          throw new Error(`Preset ${preset.label} is after toYear ${toYearToUse}.`)
         }
 
         if (fromMonth) {
           const presetMonth = preset.date.getMonth()
 
           if (presetMonth < fromMonth.getMonth()) {
-            throw new Error(
-              `Preset ${preset.label} is before fromMonth ${fromMonth}.`,
-            )
+            throw new Error(`Preset ${preset.label} is before fromMonth ${fromMonth}.`)
           }
         }
 
@@ -1057,9 +963,7 @@ const validatePresets = (
           const presetMonth = preset.date.getMonth()
 
           if (presetMonth > toMonth.getMonth()) {
-            throw new Error(
-              `Preset ${preset.label} is after toMonth ${toMonth}.`,
-            )
+            throw new Error(`Preset ${preset.label} is after toMonth ${toMonth}.`)
           }
         }
 
@@ -1067,9 +971,7 @@ const validatePresets = (
           const presetDay = preset.date.getDate()
 
           if (presetDay < fromDay.getDate()) {
-            throw new Error(
-              `Preset ${preset.label} is before fromDay ${fromDay}.`,
-            )
+            throw new Error(`Preset ${preset.label} is before fromDay ${fromDay}.`)
           }
         }
 
@@ -1077,12 +979,7 @@ const validatePresets = (
           const presetDay = preset.date.getDate()
 
           if (presetDay > toDay.getDate()) {
-            throw new Error(
-              `Preset ${preset.label} is after toDay ${format(
-                toDay,
-                "MMM dd, yyyy",
-              )}.`,
-            )
+            throw new Error(`Preset ${preset.label} is after toDay ${format(toDay, "MMM dd, yyyy")}.`)
           }
         }
       }
@@ -1092,27 +989,18 @@ const validatePresets = (
         const presetToYear = preset.dateRange.to?.getFullYear()
 
         if (presetFromYear && fromYear && presetFromYear < fromYear) {
-          throw new Error(
-            `Preset ${preset.label}'s 'from' is before fromYear ${fromYearToUse}.`,
-          )
+          throw new Error(`Preset ${preset.label}'s 'from' is before fromYear ${fromYearToUse}.`)
         }
 
         if (presetToYear && toYear && presetToYear > toYear) {
-          throw new Error(
-            `Preset ${preset.label}'s 'to' is after toYear ${toYearToUse}.`,
-          )
+          throw new Error(`Preset ${preset.label}'s 'to' is after toYear ${toYearToUse}.`)
         }
 
         if (fromMonth) {
           const presetMonth = preset.dateRange.from?.getMonth()
 
           if (presetMonth && presetMonth < fromMonth.getMonth()) {
-            throw new Error(
-              `Preset ${preset.label}'s 'from' is before fromMonth ${format(
-                fromMonth,
-                "MMM, yyyy",
-              )}.`,
-            )
+            throw new Error(`Preset ${preset.label}'s 'from' is before fromMonth ${format(fromMonth, "MMM, yyyy")}.`)
           }
         }
 
@@ -1120,12 +1008,7 @@ const validatePresets = (
           const presetMonth = preset.dateRange.to?.getMonth()
 
           if (presetMonth && presetMonth > toMonth.getMonth()) {
-            throw new Error(
-              `Preset ${preset.label}'s 'to' is after toMonth ${format(
-                toMonth,
-                "MMM, yyyy",
-              )}.`,
-            )
+            throw new Error(`Preset ${preset.label}'s 'to' is after toMonth ${format(toMonth, "MMM, yyyy")}.`)
           }
         }
 
@@ -1134,9 +1017,7 @@ const validatePresets = (
 
           if (presetDay && presetDay < fromDay.getDate()) {
             throw new Error(
-              `Preset ${
-                preset.dateRange.from
-              }'s 'from' is before fromDay ${format(fromDay, "MMM dd, yyyy")}.`,
+              `Preset ${preset.dateRange.from}'s 'from' is before fromDay ${format(fromDay, "MMM dd, yyyy")}.`,
             )
           }
         }
@@ -1145,12 +1026,7 @@ const validatePresets = (
           const presetDay = preset.dateRange.to?.getDate()
 
           if (presetDay && presetDay > toDay.getDate()) {
-            throw new Error(
-              `Preset ${preset.label}'s 'to' is after toDay ${format(
-                toDay,
-                "MMM dd, yyyy",
-              )}.`,
-            )
+            throw new Error(`Preset ${preset.label}'s 'to' is after toDay ${format(toDay, "MMM dd, yyyy")}.`)
           }
         }
       }

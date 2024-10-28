@@ -9,13 +9,7 @@ const RadioCardGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitives.Root>
 >(({ className, ...props }, forwardedRef) => {
-  return (
-    <RadioGroupPrimitives.Root
-      ref={forwardedRef}
-      className={cx("grid gap-2", className)}
-      {...props}
-    />
-  )
+  return <RadioGroupPrimitives.Root ref={forwardedRef} className={cx("grid gap-2", className)} {...props} />
 })
 
 RadioCardGroup.displayName = "RadioCardGroup"
@@ -74,11 +68,7 @@ const RadioCardIndicator = React.forwardRef<
         className,
       )}
     >
-      <RadioGroupPrimitives.Indicator
-        ref={forwardedRef}
-        className={cx("flex items-center justify-center")}
-        {...props}
-      >
+      <RadioGroupPrimitives.Indicator ref={forwardedRef} className={cx("flex items-center justify-center")} {...props}>
         <div
           className={cx(
             // base

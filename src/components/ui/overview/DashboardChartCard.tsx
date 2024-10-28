@@ -4,12 +4,7 @@ import { LineChart } from "@/components/LineChart"
 import { overviews } from "@/data/overview-data"
 import { OverviewData } from "@/data/schema"
 import { cx, formatters, percentageFormatter } from "@/lib/utils"
-import {
-  eachDayOfInterval,
-  formatDate,
-  interval,
-  isWithinInterval,
-} from "date-fns"
+import { eachDayOfInterval, formatDate, interval, isWithinInterval } from "date-fns"
 import { DateRange } from "react-day-picker"
 import { getPeriod } from "./DashboardFilterbar"
 
@@ -39,28 +34,15 @@ export const getBadgeType = (value: number) => {
   }
 }
 
-export function ChartCard({
-  title,
-  type,
-  selectedDates,
-  selectedPeriod,
-  isThumbnail,
-}: CardProps) {
+export function ChartCard({ title, type, selectedDates, selectedPeriod, isThumbnail }: CardProps) {
   const formatter = formattingMap[type]
   const selectedDatesInterval =
-    selectedDates?.from && selectedDates?.to
-      ? interval(selectedDates.from, selectedDates.to)
-      : null
+    selectedDates?.from && selectedDates?.to ? interval(selectedDates.from, selectedDates.to) : null
   const allDatesInInterval =
-    selectedDates?.from && selectedDates?.to
-      ? eachDayOfInterval(interval(selectedDates.from, selectedDates.to))
-      : null
+    selectedDates?.from && selectedDates?.to ? eachDayOfInterval(interval(selectedDates.from, selectedDates.to)) : null
   const prevDates = getPeriod(selectedDates)
 
-  const prevDatesInterval =
-    prevDates?.from && prevDates?.to
-      ? interval(prevDates.from, prevDates.to)
-      : null
+  const prevDatesInterval = prevDates?.from && prevDates?.to ? interval(prevDates.from, prevDates.to) : null
 
   const data = overviews
     .filter((overview) => {
@@ -93,11 +75,8 @@ export function ChartCard({
         formattedDate: formatDate(date, "dd/MM/yyyy"),
         value,
         previousDate: prevOverview?.date,
-        previousFormattedDate: prevOverview
-          ? formatDate(prevOverview.date, "dd/MM/yyyy")
-          : null,
-        previousValue:
-          selectedPeriod !== "no-comparison" ? previousValue : null,
+        previousFormattedDate: prevOverview ? formatDate(prevOverview.date, "dd/MM/yyyy") : null,
+        previousValue: selectedPeriod !== "no-comparison" ? previousValue : null,
         evolution:
           selectedPeriod !== "no-comparison" && value && previousValue
             ? (value - previousValue) / previousValue
@@ -106,39 +85,25 @@ export function ChartCard({
     })
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-  const categories =
-    selectedPeriod === "no-comparison" ? ["value"] : ["value", "previousValue"]
-  const value =
-    chartData?.reduce((acc, item) => acc + (item.value || 0), 0) || 0
-  const previousValue =
-    chartData?.reduce((acc, item) => acc + (item.previousValue || 0), 0) || 0
-  const evolution =
-    selectedPeriod !== "no-comparison"
-      ? (value - previousValue) / previousValue
-      : 0
+  const categories = selectedPeriod === "no-comparison" ? ["value"] : ["value", "previousValue"]
+  const value = chartData?.reduce((acc, item) => acc + (item.value || 0), 0) || 0
+  const previousValue = chartData?.reduce((acc, item) => acc + (item.previousValue || 0), 0) || 0
+  const evolution = selectedPeriod !== "no-comparison" ? (value - previousValue) / previousValue : 0
 
   return (
     <div className={cx("transition")}>
       <div className="flex items-center justify-between gap-x-2">
         <div className="flex items-center gap-x-2">
-          <dt className="font-bold text-gray-900 sm:text-sm dark:text-gray-50">
-            {title}
-          </dt>
+          <dt className="font-bold text-gray-900 sm:text-sm dark:text-gray-50">{title}</dt>
           {selectedPeriod !== "no-comparison" && (
-            <Badge variant={getBadgeType(evolution)}>
-              {percentageFormatter(evolution)}
-            </Badge>
+            <Badge variant={getBadgeType(evolution)}>{percentageFormatter(evolution)}</Badge>
           )}
         </div>
       </div>
       <div className="mt-2 flex items-baseline justify-between">
-        <dd className="text-xl text-gray-900 dark:text-gray-50">
-          {formatter(value)}
-        </dd>
+        <dd className="text-xl text-gray-900 dark:text-gray-50">{formatter(value)}</dd>
         {selectedPeriod !== "no-comparison" && (
-          <dd className="text-sm text-gray-500">
-            from {formatter(previousValue)}
-          </dd>
+          <dd className="text-sm text-gray-500">from {formatter(previousValue)}</dd>
         )}
       </div>
       <LineChart

@@ -1,12 +1,7 @@
 // Tremor Raw Select [v0.0.2]
 
 import * as SelectPrimitives from "@radix-ui/react-select"
-import {
-  RiArrowDownSLine,
-  RiArrowUpSLine,
-  RiCheckLine,
-  RiExpandUpDownLine,
-} from "@remixicon/react"
+import { RiArrowDownSLine, RiArrowUpSLine, RiCheckLine, RiExpandUpDownLine } from "@remixicon/react"
 import React from "react"
 
 import { cx, focusInput, hasErrorInput } from "@/lib/utils"
@@ -52,11 +47,7 @@ const SelectTrigger = React.forwardRef<
   return (
     <SelectPrimitives.Trigger
       ref={forwardedRef}
-      className={cx(
-        selectTriggerStyles,
-        hasError ? hasErrorInput : "",
-        className,
-      )}
+      className={cx(selectTriggerStyles, hasError ? hasErrorInput : "", className)}
       {...props}
     >
       <span className="truncate">{children}</span>
@@ -84,10 +75,7 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, forwardedRef) => (
   <SelectPrimitives.ScrollUpButton
     ref={forwardedRef}
-    className={cx(
-      "flex cursor-default items-center justify-center py-1",
-      className,
-    )}
+    className={cx("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
     <RiArrowUpSLine className="size-3 shrink-0" aria-hidden="true" />
@@ -101,76 +89,60 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, forwardedRef) => (
   <SelectPrimitives.ScrollDownButton
     ref={forwardedRef}
-    className={cx(
-      "flex cursor-default items-center justify-center py-1",
-      className,
-    )}
+    className={cx("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
     <RiArrowDownSLine className="size-3 shrink-0" aria-hidden="true" />
   </SelectPrimitives.ScrollDownButton>
 ))
-SelectScrollDownButton.displayName =
-  SelectPrimitives.ScrollDownButton.displayName
+SelectScrollDownButton.displayName = SelectPrimitives.ScrollDownButton.displayName
 
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitives.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitives.Content>
->(
-  (
-    {
-      className,
-      position = "popper",
-      children,
-      sideOffset = 8,
-      collisionPadding = 10,
-      ...props
-    },
-    forwardedRef,
-  ) => (
-    <SelectPrimitives.Portal>
-      <SelectPrimitives.Content
-        ref={forwardedRef}
+>(({ className, position = "popper", children, sideOffset = 8, collisionPadding = 10, ...props }, forwardedRef) => (
+  <SelectPrimitives.Portal>
+    <SelectPrimitives.Content
+      ref={forwardedRef}
+      className={cx(
+        // base
+        "relative z-50 overflow-hidden rounded-md border shadow-xl shadow-black/[2.5%]",
+        // widths
+        "min-w-[calc(var(--radix-select-trigger-width)-2px)] max-w-[95vw]",
+        // heights
+        "max-h-[--radix-select-content-available-height]",
+        // background color
+        "bg-white dark:bg-gray-950",
+        // text color
+        "text-gray-900 dark:text-gray-50",
+        // border color
+        "border-gray-200 dark:border-gray-800",
+        // transition
+        "will-change-[transform,opacity]",
+        // "data-[state=open]:animate-slideDownAndFade",
+        "data-[state=closed]:animate-hide",
+        "data-[side=bottom]:animate-slideDownAndFade data-[side=left]:animate-slideLeftAndFade data-[side=right]:animate-slideRightAndFade data-[side=top]:animate-slideUpAndFade",
+        className,
+      )}
+      sideOffset={sideOffset}
+      position={position}
+      collisionPadding={collisionPadding}
+      {...props}
+    >
+      <SelectScrollUpButton />
+      <SelectPrimitives.Viewport
         className={cx(
-          // base
-          "relative z-50 overflow-hidden rounded-md border shadow-xl shadow-black/[2.5%]",
-          // widths
-          "min-w-[calc(var(--radix-select-trigger-width)-2px)] max-w-[95vw]",
-          // heights
-          "max-h-[--radix-select-content-available-height]",
-          // background color
-          "bg-white dark:bg-gray-950",
-          // text color
-          "text-gray-900 dark:text-gray-50",
-          // border color
-          "border-gray-200 dark:border-gray-800",
-          // transition
-          "will-change-[transform,opacity]",
-          // "data-[state=open]:animate-slideDownAndFade",
-          "data-[state=closed]:animate-hide",
-          "data-[side=bottom]:animate-slideDownAndFade data-[side=left]:animate-slideLeftAndFade data-[side=right]:animate-slideRightAndFade data-[side=top]:animate-slideUpAndFade",
-          className,
+          "p-1",
+          position === "popper" &&
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[calc(var(--radix-select-trigger-width))]",
         )}
-        sideOffset={sideOffset}
-        position={position}
-        collisionPadding={collisionPadding}
-        {...props}
       >
-        <SelectScrollUpButton />
-        <SelectPrimitives.Viewport
-          className={cx(
-            "p-1",
-            position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[calc(var(--radix-select-trigger-width))]",
-          )}
-        >
-          {children}
-        </SelectPrimitives.Viewport>
-        <SelectScrollDownButton />
-      </SelectPrimitives.Content>
-    </SelectPrimitives.Portal>
-  ),
-)
+        {children}
+      </SelectPrimitives.Viewport>
+      <SelectScrollDownButton />
+    </SelectPrimitives.Content>
+  </SelectPrimitives.Portal>
+))
 
 SelectContent.displayName = "SelectContent"
 
@@ -215,14 +187,9 @@ const SelectItem = React.forwardRef<
       )}
       {...props}
     >
-      <SelectPrimitives.ItemText className="flex-1 truncate">
-        {children}
-      </SelectPrimitives.ItemText>
+      <SelectPrimitives.ItemText className="flex-1 truncate">{children}</SelectPrimitives.ItemText>
       <SelectPrimitives.ItemIndicator>
-        <RiCheckLine
-          className="size-5 shrink-0 text-gray-800 dark:text-gray-200"
-          aria-hidden="true"
-        />
+        <RiCheckLine className="size-5 shrink-0 text-gray-800 dark:text-gray-200" aria-hidden="true" />
       </SelectPrimitives.ItemIndicator>
     </SelectPrimitives.Item>
   )
@@ -249,13 +216,4 @@ const SelectSeparator = React.forwardRef<
 
 SelectSeparator.displayName = "SelectSeparator"
 
-export {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectGroupLabel,
-  SelectItem,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-}
+export { Select, SelectContent, SelectGroup, SelectGroupLabel, SelectItem, SelectSeparator, SelectTrigger, SelectValue }

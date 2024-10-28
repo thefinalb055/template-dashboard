@@ -40,21 +40,14 @@ interface LegendItemProps {
   activeLegend?: string
 }
 
-const LegendItem = ({
-  name,
-  color,
-  onClick,
-  activeLegend,
-}: LegendItemProps) => {
+const LegendItem = ({ name, color, onClick, activeLegend }: LegendItemProps) => {
   const hasOnValueChange = !!onClick
   return (
     <li
       className={cx(
         // base
         "group inline-flex flex-nowrap items-center gap-1.5 whitespace-nowrap rounded px-2 py-1 transition",
-        hasOnValueChange
-          ? "bg-transpaent cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-          : "cursor-default",
+        hasOnValueChange ? "bg-transpaent cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800" : "cursor-default",
       )}
       onClick={(e) => {
         e.stopPropagation()
@@ -75,8 +68,7 @@ const LegendItem = ({
           "truncate whitespace-nowrap text-xs",
           // text color
           "text-gray-700 dark:text-gray-300",
-          hasOnValueChange &&
-            "group-hover:text-gray-900 dark:group-hover:text-gray-50",
+          hasOnValueChange && "group-hover:text-gray-900 dark:group-hover:text-gray-50",
           activeLegend && activeLegend !== name ? "opacity-40" : "opacity-100",
         )}
       >
@@ -177,8 +169,7 @@ const Legend = React.forwardRef<HTMLOListElement, LegendProps>((props, ref) => {
     if (!scrollable) return
 
     const hasLeftScroll = scrollable.scrollLeft > 0
-    const hasRightScroll =
-      scrollable.scrollWidth - scrollable.clientWidth > scrollable.scrollLeft
+    const hasRightScroll = scrollable.scrollWidth - scrollable.clientWidth > scrollable.scrollLeft
 
     setHasScroll({ left: hasLeftScroll, right: hasRightScroll })
   }, [setHasScroll])
@@ -190,10 +181,7 @@ const Legend = React.forwardRef<HTMLOListElement, LegendProps>((props, ref) => {
 
       if (element && enableLegendSlider) {
         element.scrollTo({
-          left:
-            direction === "left"
-              ? element.scrollLeft - width
-              : element.scrollLeft + width,
+          left: direction === "left" ? element.scrollLeft - width : element.scrollLeft + width,
           behavior: "smooth",
         })
         setTimeout(() => {
@@ -250,11 +238,7 @@ const Legend = React.forwardRef<HTMLOListElement, LegendProps>((props, ref) => {
   }, [checkScroll, enableLegendSlider])
 
   return (
-    <ol
-      ref={ref}
-      className={cx("relative overflow-hidden", className)}
-      {...other}
-    >
+    <ol ref={ref} className={cx("relative overflow-hidden", className)} {...other}>
       <div
         ref={scrollableRef}
         tabIndex={0}
@@ -323,8 +307,7 @@ const ChartLegend = (
   const legendRef = React.useRef<HTMLDivElement>(null)
 
   useOnWindowResize(() => {
-    const calculateHeight = (height: number | undefined) =>
-      height ? Number(height) + 15 : 60
+    const calculateHeight = (height: number | undefined) => (height ? Number(height) + 15 : 60)
     setLegendHeight(calculateHeight(legendRef.current?.clientHeight))
   })
 
@@ -334,9 +317,7 @@ const ChartLegend = (
     <div ref={legendRef} className="flex items-center justify-end">
       <Legend
         categories={filteredPayload.map((entry: any) => entry.value)}
-        colors={filteredPayload.map((entry: any) =>
-          categoryColors.get(entry.value),
-        )}
+        colors={filteredPayload.map((entry: any) => categoryColors.get(entry.value))}
         onClickLegendItem={onClick}
         activeLegend={activeLegend}
         enableLegendSlider={enableLegendSlider}
@@ -356,10 +337,7 @@ interface ChartTooltipRowProps {
 const ChartTooltipRow = ({ value, name, color }: ChartTooltipRowProps) => (
   <div className="flex items-center justify-between space-x-8">
     <div className="flex items-center space-x-2">
-      <span
-        aria-hidden="true"
-        className={cx("h-[3px] w-3.5 shrink-0 rounded-full", color)}
-      />
+      <span aria-hidden="true" className={cx("h-[3px] w-3.5 shrink-0 rounded-full", color)} />
       <p
         className={cx(
           // commmon
@@ -392,12 +370,7 @@ interface ChartTooltipProps {
   valueFormatter: (value: number) => string
 }
 
-const OverviewChartTooltip = ({
-  active,
-  payload,
-  categoryColors,
-  valueFormatter,
-}: ChartTooltipProps) => {
+const OverviewChartTooltip = ({ active, payload, categoryColors, valueFormatter }: ChartTooltipProps) => {
   if (active && payload) {
     const filteredPayload = payload.filter((item: any) => item.type !== "none")
 
@@ -429,11 +402,7 @@ const OverviewChartTooltip = ({
           >
             {title}
           </p>
-          {evolution !== undefined && (
-            <Badge variant={getBadgeType(evolution)}>
-              {percentageFormatter(evolution)}
-            </Badge>
-          )}
+          {evolution !== undefined && <Badge variant={getBadgeType(evolution)}>{percentageFormatter(evolution)}</Badge>}
         </div>
         <div className={cx("space-y-1 p-2")}>
           {filteredPayload.map((payload: any, index: number) => {
@@ -442,15 +411,8 @@ const OverviewChartTooltip = ({
               <ChartTooltipRow
                 key={`id-${index}`}
                 value={valueFormatter(payload.value)}
-                name={
-                  index === 0
-                    ? payloadData.formattedDate
-                    : payloadData.previousFormattedDate
-                }
-                color={getColorClassName(
-                  categoryColors.get(payload.name) as AvailableChartColorsKeys,
-                  "bg",
-                )}
+                name={index === 0 ? payloadData.formattedDate : payloadData.previousFormattedDate}
+                color={getColorClassName(categoryColors.get(payload.name) as AvailableChartColorsKeys, "bg")}
               />
             )
           })}
@@ -502,366 +464,317 @@ interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
   yAxisLabel?: string
 }
 
-const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
-  (props, ref) => {
-    const {
-      data = [],
-      categories = [],
-      index,
-      colors = AvailableChartColors,
-      valueFormatter = (value: number) => value.toString(),
-      startEndOnly = false,
-      showXAxis = true,
-      showYAxis = true,
-      showGridLines = true,
-      yAxisWidth = 56,
-      intervalType = "equidistantPreserveStart",
-      showTooltip = true,
-      showLegend = true,
-      autoMinValue = false,
-      minValue,
-      maxValue,
-      allowDecimals = true,
-      connectNulls = false,
-      className,
-      onValueChange,
-      enableLegendSlider = false,
-      tickGap = 5,
-      xAxisLabel,
-      yAxisLabel,
-      ...other
-    } = props
-    const paddingValue = !showXAxis && !showYAxis ? 0 : 20
-    const [legendHeight, setLegendHeight] = React.useState(60)
-    const [activeDot, setActiveDot] = React.useState<ActiveDot | undefined>(
-      undefined,
-    )
-    const [activeLegend, setActiveLegend] = React.useState<string | undefined>(
-      undefined,
-    )
-    const categoryColors = constructCategoryColors(categories, colors)
+const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>((props, ref) => {
+  const {
+    data = [],
+    categories = [],
+    index,
+    colors = AvailableChartColors,
+    valueFormatter = (value: number) => value.toString(),
+    startEndOnly = false,
+    showXAxis = true,
+    showYAxis = true,
+    showGridLines = true,
+    yAxisWidth = 56,
+    intervalType = "equidistantPreserveStart",
+    showTooltip = true,
+    showLegend = true,
+    autoMinValue = false,
+    minValue,
+    maxValue,
+    allowDecimals = true,
+    connectNulls = false,
+    className,
+    onValueChange,
+    enableLegendSlider = false,
+    tickGap = 5,
+    xAxisLabel,
+    yAxisLabel,
+    ...other
+  } = props
+  const paddingValue = !showXAxis && !showYAxis ? 0 : 20
+  const [legendHeight, setLegendHeight] = React.useState(60)
+  const [activeDot, setActiveDot] = React.useState<ActiveDot | undefined>(undefined)
+  const [activeLegend, setActiveLegend] = React.useState<string | undefined>(undefined)
+  const categoryColors = constructCategoryColors(categories, colors)
 
-    const yAxisDomain = getYAxisDomain(autoMinValue, minValue, maxValue)
-    const hasOnValueChange = !!onValueChange
+  const yAxisDomain = getYAxisDomain(autoMinValue, minValue, maxValue)
+  const hasOnValueChange = !!onValueChange
 
-    function onDotClick(itemData: any, event: React.MouseEvent) {
-      event.stopPropagation()
+  function onDotClick(itemData: any, event: React.MouseEvent) {
+    event.stopPropagation()
 
-      if (!hasOnValueChange) return
-      if (
-        (itemData.index === activeDot?.index &&
-          itemData.dataKey === activeDot?.dataKey) ||
-        (hasOnlyOneValueForKey(data, itemData.dataKey) &&
-          activeLegend &&
-          activeLegend === itemData.dataKey)
-      ) {
-        setActiveLegend(undefined)
-        setActiveDot(undefined)
-        onValueChange?.(null)
-      } else {
-        setActiveLegend(itemData.dataKey)
-        setActiveDot({
-          index: itemData.index,
-          dataKey: itemData.dataKey,
-        })
-        onValueChange?.({
-          eventType: "dot",
-          categoryClicked: itemData.dataKey,
-          ...itemData.payload,
-        })
-      }
-    }
-
-    function onCategoryClick(dataKey: string) {
-      if (!hasOnValueChange) return
-      if (
-        (dataKey === activeLegend && !activeDot) ||
-        (hasOnlyOneValueForKey(data, dataKey) &&
-          activeDot &&
-          activeDot.dataKey === dataKey)
-      ) {
-        setActiveLegend(undefined)
-        onValueChange?.(null)
-      } else {
-        setActiveLegend(dataKey)
-        onValueChange?.({
-          eventType: "category",
-          categoryClicked: dataKey,
-        })
-      }
+    if (!hasOnValueChange) return
+    if (
+      (itemData.index === activeDot?.index && itemData.dataKey === activeDot?.dataKey) ||
+      (hasOnlyOneValueForKey(data, itemData.dataKey) && activeLegend && activeLegend === itemData.dataKey)
+    ) {
+      setActiveLegend(undefined)
       setActiveDot(undefined)
+      onValueChange?.(null)
+    } else {
+      setActiveLegend(itemData.dataKey)
+      setActiveDot({
+        index: itemData.index,
+        dataKey: itemData.dataKey,
+      })
+      onValueChange?.({
+        eventType: "dot",
+        categoryClicked: itemData.dataKey,
+        ...itemData.payload,
+      })
     }
+  }
 
-    return (
-      <div ref={ref} className={cx("h-80 w-full", className)} {...other}>
-        <ResponsiveContainer>
-          <RechartsLineChart
-            data={data}
-            onClick={
-              hasOnValueChange && (activeLegend || activeDot)
-                ? () => {
-                    setActiveDot(undefined)
-                    setActiveLegend(undefined)
-                    onValueChange?.(null)
-                  }
-                : undefined
-            }
-            margin={{
-              bottom: xAxisLabel ? 30 : undefined,
-              left: yAxisLabel ? 20 : undefined,
-              right: yAxisLabel ? 5 : undefined,
-              top: 0,
-            }}
+  function onCategoryClick(dataKey: string) {
+    if (!hasOnValueChange) return
+    if (
+      (dataKey === activeLegend && !activeDot) ||
+      (hasOnlyOneValueForKey(data, dataKey) && activeDot && activeDot.dataKey === dataKey)
+    ) {
+      setActiveLegend(undefined)
+      onValueChange?.(null)
+    } else {
+      setActiveLegend(dataKey)
+      onValueChange?.({
+        eventType: "category",
+        categoryClicked: dataKey,
+      })
+    }
+    setActiveDot(undefined)
+  }
+
+  return (
+    <div ref={ref} className={cx("h-80 w-full", className)} {...other}>
+      <ResponsiveContainer>
+        <RechartsLineChart
+          data={data}
+          onClick={
+            hasOnValueChange && (activeLegend || activeDot)
+              ? () => {
+                  setActiveDot(undefined)
+                  setActiveLegend(undefined)
+                  onValueChange?.(null)
+                }
+              : undefined
+          }
+          margin={{
+            bottom: xAxisLabel ? 30 : undefined,
+            left: yAxisLabel ? 20 : undefined,
+            right: yAxisLabel ? 5 : undefined,
+            top: 0,
+          }}
+        >
+          {showGridLines ? (
+            <CartesianGrid
+              className={cx("stroke-gray-200 stroke-1 dark:stroke-gray-800")}
+              horizontal={true}
+              vertical={false}
+            />
+          ) : null}
+          <XAxis
+            padding={{ left: paddingValue, right: paddingValue }}
+            hide={!showXAxis}
+            dataKey={index}
+            interval={startEndOnly ? "preserveStartEnd" : intervalType}
+            tick={{ transform: "translate(0, 6)" }}
+            ticks={startEndOnly ? [data[0][index], data[data.length - 1][index]] : undefined}
+            fill=""
+            stroke=""
+            className={cx(
+              // base
+              "text-xs",
+              // text fill
+              "fill-gray-500 dark:fill-gray-500",
+            )}
+            tickLine={false}
+            axisLine={false}
+            minTickGap={tickGap}
           >
-            {showGridLines ? (
-              <CartesianGrid
-                className={cx("stroke-gray-200 stroke-1 dark:stroke-gray-800")}
-                horizontal={true}
-                vertical={false}
-              />
-            ) : null}
-            <XAxis
-              padding={{ left: paddingValue, right: paddingValue }}
-              hide={!showXAxis}
-              dataKey={index}
-              interval={startEndOnly ? "preserveStartEnd" : intervalType}
-              tick={{ transform: "translate(0, 6)" }}
-              ticks={
-                startEndOnly
-                  ? [data[0][index], data[data.length - 1][index]]
-                  : undefined
-              }
-              fill=""
-              stroke=""
-              className={cx(
-                // base
-                "text-xs",
-                // text fill
-                "fill-gray-500 dark:fill-gray-500",
-              )}
-              tickLine={false}
-              axisLine={false}
-              minTickGap={tickGap}
-            >
-              {xAxisLabel && (
-                <Label
-                  position="insideBottom"
-                  offset={-20}
-                  className="fill-gray-800 text-sm font-medium dark:fill-gray-200"
-                >
-                  {xAxisLabel}
-                </Label>
-              )}
-            </XAxis>
-            <YAxis
-              width={yAxisWidth}
-              hide={!showYAxis}
-              axisLine={false}
-              tickLine={false}
-              type="number"
-              domain={yAxisDomain as AxisDomain}
-              tick={{ transform: "translate(-3, 0)" }}
-              fill=""
-              stroke=""
-              className={cx(
-                // base
-                "text-xs",
-                // text fill
-                "fill-gray-500 dark:fill-gray-500",
-              )}
-              tickFormatter={valueFormatter}
-              allowDecimals={allowDecimals}
-            >
-              {yAxisLabel && (
-                <Label
-                  position="insideLeft"
-                  style={{ textAnchor: "middle" }}
-                  angle={-90}
-                  offset={-15}
-                  className="fill-gray-800 text-sm font-medium dark:fill-gray-200"
-                >
-                  {yAxisLabel}
-                </Label>
-              )}
-            </YAxis>
-            <Tooltip
-              wrapperStyle={{ outline: "none" }}
-              isAnimationActive={true}
-              animationDuration={100}
-              cursor={{ stroke: "#d1d5db", strokeWidth: 1 }}
-              offset={20}
-              position={{ y: 0 }}
-              content={
-                showTooltip ? (
-                  ({ active, payload, label }) => (
-                    <OverviewChartTooltip
-                      active={active}
-                      payload={payload}
-                      label={label}
-                      valueFormatter={valueFormatter}
-                      categoryColors={categoryColors}
-                    />
-                  )
-                ) : (
-                  <></>
+            {xAxisLabel && (
+              <Label
+                position="insideBottom"
+                offset={-20}
+                className="fill-gray-800 text-sm font-medium dark:fill-gray-200"
+              >
+                {xAxisLabel}
+              </Label>
+            )}
+          </XAxis>
+          <YAxis
+            width={yAxisWidth}
+            hide={!showYAxis}
+            axisLine={false}
+            tickLine={false}
+            type="number"
+            domain={yAxisDomain as AxisDomain}
+            tick={{ transform: "translate(-3, 0)" }}
+            fill=""
+            stroke=""
+            className={cx(
+              // base
+              "text-xs",
+              // text fill
+              "fill-gray-500 dark:fill-gray-500",
+            )}
+            tickFormatter={valueFormatter}
+            allowDecimals={allowDecimals}
+          >
+            {yAxisLabel && (
+              <Label
+                position="insideLeft"
+                style={{ textAnchor: "middle" }}
+                angle={-90}
+                offset={-15}
+                className="fill-gray-800 text-sm font-medium dark:fill-gray-200"
+              >
+                {yAxisLabel}
+              </Label>
+            )}
+          </YAxis>
+          <Tooltip
+            wrapperStyle={{ outline: "none" }}
+            isAnimationActive={true}
+            animationDuration={100}
+            cursor={{ stroke: "#d1d5db", strokeWidth: 1 }}
+            offset={20}
+            position={{ y: 0 }}
+            content={
+              showTooltip ? (
+                ({ active, payload, label }) => (
+                  <OverviewChartTooltip
+                    active={active}
+                    payload={payload}
+                    label={label}
+                    valueFormatter={valueFormatter}
+                    categoryColors={categoryColors}
+                  />
+                )
+              ) : (
+                <></>
+              )
+            }
+          />
+          {showLegend ? (
+            <RechartsLegend
+              verticalAlign="top"
+              height={legendHeight}
+              content={({ payload }) =>
+                ChartLegend(
+                  { payload },
+                  categoryColors,
+                  setLegendHeight,
+                  activeLegend,
+                  hasOnValueChange ? (clickedLegendItem: string) => onCategoryClick(clickedLegendItem) : undefined,
+                  enableLegendSlider,
                 )
               }
             />
-            {showLegend ? (
-              <RechartsLegend
-                verticalAlign="top"
-                height={legendHeight}
-                content={({ payload }) =>
-                  ChartLegend(
-                    { payload },
-                    categoryColors,
-                    setLegendHeight,
-                    activeLegend,
-                    hasOnValueChange
-                      ? (clickedLegendItem: string) =>
-                          onCategoryClick(clickedLegendItem)
-                      : undefined,
-                    enableLegendSlider,
-                  )
-                }
-              />
-            ) : null}
-            {categories.map((category) => (
-              <Line
-                className={cx(
-                  getColorClassName(
-                    categoryColors.get(category) as AvailableChartColorsKeys,
-                    "stroke",
-                  ),
-                )}
-                strokeOpacity={
-                  activeDot || (activeLegend && activeLegend !== category)
-                    ? 0.3
-                    : 1
-                }
-                activeDot={(props: any) => {
-                  const {
-                    cx: cxCoord,
-                    cy: cyCoord,
-                    stroke,
-                    strokeLinecap,
-                    strokeLinejoin,
-                    strokeWidth,
-                    dataKey,
-                  } = props
+          ) : null}
+          {categories.map((category) => (
+            <Line
+              className={cx(getColorClassName(categoryColors.get(category) as AvailableChartColorsKeys, "stroke"))}
+              strokeOpacity={activeDot || (activeLegend && activeLegend !== category) ? 0.3 : 1}
+              activeDot={(props: any) => {
+                const { cx: cxCoord, cy: cyCoord, stroke, strokeLinecap, strokeLinejoin, strokeWidth, dataKey } = props
+                return (
+                  <Dot
+                    className={cx(
+                      "stroke-white dark:stroke-gray-950",
+                      onValueChange ? "cursor-pointer" : "",
+                      getColorClassName(categoryColors.get(dataKey) as AvailableChartColorsKeys, "fill"),
+                    )}
+                    cx={cxCoord}
+                    cy={cyCoord}
+                    r={5}
+                    fill=""
+                    stroke={stroke}
+                    strokeLinecap={strokeLinecap}
+                    strokeLinejoin={strokeLinejoin}
+                    strokeWidth={strokeWidth}
+                    onClick={(_, event) => onDotClick(props, event)}
+                  />
+                )
+              }}
+              dot={(props: any) => {
+                const {
+                  stroke,
+                  strokeLinecap,
+                  strokeLinejoin,
+                  strokeWidth,
+                  cx: cxCoord,
+                  cy: cyCoord,
+                  dataKey,
+                  index,
+                } = props
+
+                if (
+                  (hasOnlyOneValueForKey(data, category) &&
+                    !(activeDot || (activeLegend && activeLegend !== category))) ||
+                  (activeDot?.index === index && activeDot?.dataKey === category)
+                ) {
                   return (
                     <Dot
-                      className={cx(
-                        "stroke-white dark:stroke-gray-950",
-                        onValueChange ? "cursor-pointer" : "",
-                        getColorClassName(
-                          categoryColors.get(
-                            dataKey,
-                          ) as AvailableChartColorsKeys,
-                          "fill",
-                        ),
-                      )}
+                      key={index}
                       cx={cxCoord}
                       cy={cyCoord}
                       r={5}
-                      fill=""
                       stroke={stroke}
+                      fill=""
                       strokeLinecap={strokeLinecap}
                       strokeLinejoin={strokeLinejoin}
                       strokeWidth={strokeWidth}
-                      onClick={(_, event) => onDotClick(props, event)}
+                      className={cx(
+                        "stroke-white dark:stroke-gray-950",
+                        onValueChange ? "cursor-pointer" : "",
+                        getColorClassName(categoryColors.get(dataKey) as AvailableChartColorsKeys, "fill"),
+                      )}
                     />
                   )
-                }}
-                dot={(props: any) => {
-                  const {
-                    stroke,
-                    strokeLinecap,
-                    strokeLinejoin,
-                    strokeWidth,
-                    cx: cxCoord,
-                    cy: cyCoord,
-                    dataKey,
-                    index,
-                  } = props
-
-                  if (
-                    (hasOnlyOneValueForKey(data, category) &&
-                      !(
-                        activeDot ||
-                        (activeLegend && activeLegend !== category)
-                      )) ||
-                    (activeDot?.index === index &&
-                      activeDot?.dataKey === category)
-                  ) {
-                    return (
-                      <Dot
-                        key={index}
-                        cx={cxCoord}
-                        cy={cyCoord}
-                        r={5}
-                        stroke={stroke}
-                        fill=""
-                        strokeLinecap={strokeLinecap}
-                        strokeLinejoin={strokeLinejoin}
-                        strokeWidth={strokeWidth}
-                        className={cx(
-                          "stroke-white dark:stroke-gray-950",
-                          onValueChange ? "cursor-pointer" : "",
-                          getColorClassName(
-                            categoryColors.get(
-                              dataKey,
-                            ) as AvailableChartColorsKeys,
-                            "fill",
-                          ),
-                        )}
-                      />
-                    )
-                  }
-                  return <React.Fragment key={index}></React.Fragment>
-                }}
-                key={category}
-                name={category}
-                type="linear"
-                dataKey={category}
-                stroke=""
-                strokeWidth={2}
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                isAnimationActive={false}
-                connectNulls={connectNulls}
-              />
-            ))}
-            {/* hidden lines to increase clickable target area */}
-            {onValueChange
-              ? categories.map((category) => (
-                  <Line
-                    className={cx("cursor-pointer")}
-                    strokeOpacity={0}
-                    key={category}
-                    name={category}
-                    type="linear"
-                    dataKey={category}
-                    stroke="transparent"
-                    fill="transparent"
-                    legendType="none"
-                    tooltipType="none"
-                    strokeWidth={12}
-                    connectNulls={connectNulls}
-                    onClick={(props: any, event) => {
-                      event.stopPropagation()
-                      const { name } = props
-                      onCategoryClick(name)
-                    }}
-                  />
-                ))
-              : null}
-          </RechartsLineChart>
-        </ResponsiveContainer>
-      </div>
-    )
-  },
-)
+                }
+                return <React.Fragment key={index}></React.Fragment>
+              }}
+              key={category}
+              name={category}
+              type="linear"
+              dataKey={category}
+              stroke=""
+              strokeWidth={2}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              isAnimationActive={false}
+              connectNulls={connectNulls}
+            />
+          ))}
+          {/* hidden lines to increase clickable target area */}
+          {onValueChange
+            ? categories.map((category) => (
+                <Line
+                  className={cx("cursor-pointer")}
+                  strokeOpacity={0}
+                  key={category}
+                  name={category}
+                  type="linear"
+                  dataKey={category}
+                  stroke="transparent"
+                  fill="transparent"
+                  legendType="none"
+                  tooltipType="none"
+                  strokeWidth={12}
+                  connectNulls={connectNulls}
+                  onClick={(props: any, event) => {
+                    event.stopPropagation()
+                    const { name } = props
+                    onCategoryClick(name)
+                  }}
+                />
+              ))
+            : null}
+        </RechartsLineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+})
 
 LineChart.displayName = "LineChart"
 

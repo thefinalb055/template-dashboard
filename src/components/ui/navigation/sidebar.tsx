@@ -1,19 +1,11 @@
 "use client"
 import { siteConfig } from "@/app/siteConfig"
 import { cx, focusRing } from "@/lib/utils"
-import {
-  RiHome2Line,
-  RiLinkM,
-  RiListCheck,
-  RiSettings5Line,
-} from "@remixicon/react"
+import { RiHome2Line, RiLinkM, RiListCheck, RiSettings5Line } from "@remixicon/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import MobileSidebar from "./MobileSidebar"
-import {
-  WorkspacesDropdownDesktop,
-  WorkspacesDropdownMobile,
-} from "./SidebarWorkspacesDropdown"
+import { WorkspacesDropdownDesktop, WorkspacesDropdownMobile } from "./SidebarWorkspacesDropdown"
 import { UserProfileDesktop, UserProfileMobile } from "./UserProfile"
 
 const navigation = [
@@ -63,10 +55,7 @@ export function Sidebar() {
       <nav className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <aside className="flex grow flex-col gap-y-6 overflow-y-auto border-r border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
           <WorkspacesDropdownDesktop />
-          <nav
-            aria-label="core navigation links"
-            className="flex flex-1 flex-col space-y-10"
-          >
+          <nav aria-label="core navigation links" className="flex flex-1 flex-col space-y-10">
             <ul role="list" className="space-y-0.5">
               {navigation.map((item) => (
                 <li key={item.name}>
@@ -87,9 +76,7 @@ export function Sidebar() {
               ))}
             </ul>
             <div>
-              <span className="text-xs font-medium leading-6 text-gray-500">
-                Shortcuts
-              </span>
+              <span className="text-xs font-medium leading-6 text-gray-500">Shortcuts</span>
               <ul aria-label="shortcuts" role="list" className="space-y-0.5">
                 {shortcuts.map((item) => (
                   <li key={item.name}>
@@ -103,10 +90,7 @@ export function Sidebar() {
                         focusRing,
                       )}
                     >
-                      <item.icon
-                        className="size-4 shrink-0"
-                        aria-hidden="true"
-                      />
+                      <item.icon className="size-4 shrink-0" aria-hidden="true" />
                       {item.name}
                     </Link>
                   </li>

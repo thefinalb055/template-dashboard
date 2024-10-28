@@ -97,10 +97,7 @@ const data2: KpiEntry[] = [
   },
 ]
 
-export type KpiEntryExtended = Omit<
-  KpiEntry,
-  "current" | "allowed" | "unit"
-> & {
+export type KpiEntryExtended = Omit<KpiEntry, "current" | "allowed" | "unit"> & {
   value: string
   color: string
 }
@@ -130,9 +127,7 @@ const overviewsDates = overviews.map((item) => toDate(item.date).getTime())
 const maxDate = toDate(Math.max(...overviewsDates))
 
 export default function Overview() {
-  const [selectedDates, setSelectedDates] = React.useState<
-    DateRange | undefined
-  >({
+  const [selectedDates, setSelectedDates] = React.useState<DateRange | undefined>({
     from: subDays(maxDate, 30),
     to: maxDate,
   })
@@ -195,11 +190,7 @@ export default function Overview() {
             onDatesChange={(dates) => setSelectedDates(dates)}
           />
         </div>
-        <dl
-          className={cx(
-            "mt-10 grid grid-cols-1 gap-14 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
-          )}
-        >
+        <dl className={cx("mt-10 grid grid-cols-1 gap-14 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3")}>
           {categories.map((category) => {
             return (
               <ChartCard

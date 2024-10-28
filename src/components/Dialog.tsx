@@ -5,9 +5,7 @@ import React from "react"
 
 import { cx, focusRing } from "@/lib/utils"
 
-const Dialog = (
-  props: React.ComponentPropsWithoutRef<typeof DialogPrimitives.Root>,
-) => {
+const Dialog = (props: React.ComponentPropsWithoutRef<typeof DialogPrimitives.Root>) => {
   return <DialogPrimitives.Root {...props} />
 }
 Dialog.displayName = "Dialog"
@@ -77,10 +75,7 @@ const DialogContent = React.forwardRef<
 
 DialogContent.displayName = "DialogContent"
 
-const DialogHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
+const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   return <div className={cx("flex flex-col gap-y-1", className)} {...props} />
 }
 
@@ -120,30 +115,10 @@ const DialogDescription = React.forwardRef<
 
 DialogDescription.displayName = "DialogDescription"
 
-const DialogFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
-  return (
-    <div
-      className={cx(
-        "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-        className,
-      )}
-      {...props}
-    />
-  )
+const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+  return <div className={cx("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
 }
 
 DialogFooter.displayName = "DialogFooter"
 
-export {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-}
+export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger }

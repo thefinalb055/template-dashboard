@@ -74,10 +74,7 @@ export const constructCategoryColors = (
   return categoryColors
 }
 
-export const getColorClassName = (
-  color: AvailableChartColorsKeys,
-  type: ColorUtility,
-): string => {
+export const getColorClassName = (color: AvailableChartColorsKeys, type: ColorUtility): string => {
   const fallbackColor = {
     bg: "bg-gray-500",
     stroke: "stroke-gray-500",
@@ -89,11 +86,7 @@ export const getColorClassName = (
 
 // Tremor Raw getYAxisDomain [v0.0.0]
 
-export const getYAxisDomain = (
-  autoMinValue: boolean,
-  minValue: number | undefined,
-  maxValue: number | undefined,
-) => {
+export const getYAxisDomain = (autoMinValue: boolean, minValue: number | undefined, maxValue: number | undefined) => {
   const minDomain = autoMinValue ? "auto" : (minValue ?? 0)
   const maxDomain = maxValue ?? "auto"
   return [minDomain, maxDomain]
@@ -101,10 +94,7 @@ export const getYAxisDomain = (
 
 // Tremor Raw hasOnlyOneValueForKey [v0.1.0]
 
-export function hasOnlyOneValueForKey(
-  array: any[],
-  keyToCheck: string,
-): boolean {
+export function hasOnlyOneValueForKey(array: any[], keyToCheck: string): boolean {
   const val: any[] = []
 
   for (const obj of array) {

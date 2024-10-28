@@ -3,7 +3,7 @@
 import { Slot } from "@radix-ui/react-slot"
 import { RiLoader2Fill } from "@remixicon/react"
 import React from "react"
-import { tv, type VariantProps } from "tailwind-variants"
+import { type VariantProps, tv } from "tailwind-variants"
 
 import { cx, focusRing } from "@/lib/utils"
 
@@ -92,9 +92,7 @@ const buttonVariants = tv({
   },
 })
 
-interface ButtonProps
-  extends React.ComponentPropsWithoutRef<"button">,
-    VariantProps<typeof buttonVariants> {
+interface ButtonProps extends React.ComponentPropsWithoutRef<"button">, VariantProps<typeof buttonVariants> {
   asChild?: boolean
   isLoading?: boolean
   loadingText?: string
@@ -102,16 +100,7 @@ interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      asChild,
-      isLoading = false,
-      loadingText,
-      className,
-      disabled,
-      variant,
-      children,
-      ...props
-    }: ButtonProps,
+    { asChild, isLoading = false, loadingText, className, disabled, variant, children, ...props }: ButtonProps,
     forwardedRef,
   ) => {
     const Component = asChild ? Slot : "button"
@@ -124,13 +113,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading ? (
           <span className="pointer-events-none flex shrink-0 items-center justify-center gap-1.5">
-            <RiLoader2Fill
-              className="size-4 shrink-0 animate-spin"
-              aria-hidden="true"
-            />
-            <span className="sr-only">
-              {loadingText ? loadingText : "Loading"}
-            </span>
+            <RiLoader2Fill className="size-4 shrink-0 animate-spin" aria-hidden="true" />
+            <span className="sr-only">{loadingText ? loadingText : "Loading"}</span>
             {loadingText ? loadingText : children}
           </span>
         ) : (

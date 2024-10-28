@@ -1,15 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
-function generateRandomData(
-  previousValue,
-  min,
-  max,
-  variance,
-  isWeekend,
-  weekendReduction,
-  momentum,
-) {
+function generateRandomData(previousValue, min, max, variance, isWeekend, weekendReduction, momentum) {
   let drift = (Math.random() - 0.5) * 2 * variance
   drift += momentum // Apply momentum
 

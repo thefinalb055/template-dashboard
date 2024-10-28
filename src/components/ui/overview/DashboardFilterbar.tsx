@@ -4,9 +4,7 @@ import { DateRangePicker } from "@/components/DatePicker"
 import { subYears } from "date-fns"
 import { DateRange } from "react-day-picker"
 
-export const getPeriod = (
-  dateRange: DateRange | undefined,
-): DateRange | undefined => {
+export const getPeriod = (dateRange: DateRange | undefined): DateRange | undefined => {
   if (!dateRange) return undefined
   const from = dateRange.from
   const to = dateRange.to
@@ -28,12 +26,7 @@ type FilterbarProps = {
   onDatesChange: (dates: DateRange | undefined) => void
 }
 
-export function Filterbar({
-  maxDate,
-  minDate,
-  selectedDates,
-  onDatesChange,
-}: FilterbarProps) {
+export function Filterbar({ maxDate, minDate, selectedDates, onDatesChange }: FilterbarProps) {
   return (
     <div className="w-full sm:flex sm:items-center sm:gap-2">
       <DateRangePicker

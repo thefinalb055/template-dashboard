@@ -2,7 +2,7 @@
 
 import { RiEyeFill, RiEyeOffFill, RiSearchLine } from "@remixicon/react"
 import React from "react"
-import { tv, type VariantProps } from "tailwind-variants"
+import { type VariantProps, tv } from "tailwind-variants"
 
 import { cx, focusInput, focusRing, hasErrorInput } from "@/lib/utils"
 
@@ -47,24 +47,12 @@ const inputStyles = tv({
   },
 })
 
-interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputStyles> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputStyles> {
   inputClassName?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      className,
-      inputClassName,
-      hasError,
-      enableStepper = true,
-      type,
-      ...props
-    }: InputProps,
-    forwardedRef,
-  ) => {
+  ({ className, inputClassName, hasError, enableStepper = true, type, ...props }: InputProps, forwardedRef) => {
     const [typeState, setTypeState] = React.useState(type)
 
     const isPassword = type === "password"
@@ -94,18 +82,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "text-gray-400 dark:text-gray-600",
             )}
           >
-            <RiSearchLine
-              className="size-[1.125rem] shrink-0"
-              aria-hidden="true"
-            />
+            <RiSearchLine className="size-[1.125rem] shrink-0" aria-hidden="true" />
           </div>
         )}
         {isPassword && (
-          <div
-            className={cx(
-              "absolute bottom-0 right-0 flex h-full items-center justify-center px-3",
-            )}
-          >
+          <div className={cx("absolute bottom-0 right-0 flex h-full items-center justify-center px-3")}>
             <button
               aria-label="Change password visibility"
               className={cx(
@@ -122,9 +103,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 setTypeState(typeState === "password" ? "text" : "password")
               }}
             >
-              <span className="sr-only">
-                {typeState === "password" ? "Show password" : "Hide password"}
-              </span>
+              <span className="sr-only">{typeState === "password" ? "Show password" : "Hide password"}</span>
               {typeState === "password" ? (
                 <RiEyeFill aria-hidden="true" className="size-5 shrink-0" />
               ) : (

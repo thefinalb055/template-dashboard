@@ -44,11 +44,7 @@ export const WorkspacesDropdownDesktop = () => {
   return (
     <>
       {/* sidebar (lg+) */}
-      <DropdownMenu
-        open={dropdownOpen}
-        onOpenChange={setDropdownOpen}
-        modal={false}
-      >
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen} modal={false}>
         <DropdownMenuTrigger asChild>
           <button
             className={cx(
@@ -67,14 +63,9 @@ export const WorkspacesDropdownDesktop = () => {
                 <p className="truncate whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-50">
                   Retail analytics
                 </p>
-                <p className="whitespace-nowrap text-left text-xs text-gray-700 dark:text-gray-300">
-                  Member
-                </p>
+                <p className="whitespace-nowrap text-left text-xs text-gray-700 dark:text-gray-300">Member</p>
               </div>
-              <RiExpandUpDownLine
-                className="size-5 shrink-0 text-gray-500"
-                aria-hidden="true"
-              />
+              <RiExpandUpDownLine className="size-5 shrink-0 text-gray-500" aria-hidden="true" />
             </div>
           </button>
         </DropdownMenuTrigger>
@@ -89,9 +80,7 @@ export const WorkspacesDropdownDesktop = () => {
           }}
         >
           <DropdownMenuGroup>
-            <DropdownMenuLabel>
-              Workspaces ({workspaces.length})
-            </DropdownMenuLabel>
+            <DropdownMenuLabel>Workspaces ({workspaces.length})</DropdownMenuLabel>
             {workspaces.map((workspace) => (
               <DropdownMenuItem key={workspace.value}>
                 <div className="flex w-full items-center gap-x-2.5">
@@ -105,12 +94,8 @@ export const WorkspacesDropdownDesktop = () => {
                     {workspace.initials}
                   </span>
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                      {workspace.name}
-                    </p>
-                    <p className="text-xs text-gray-700 dark:text-gray-400">
-                      {workspace.role}
-                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-50">{workspace.name}</p>
+                    <p className="text-xs text-gray-700 dark:text-gray-400">{workspace.role}</p>
                   </div>
                 </div>
               </DropdownMenuItem>
@@ -147,11 +132,7 @@ export const WorkspacesDropdownMobile = () => {
   return (
     <>
       {/* sidebar (xs-lg) */}
-      <DropdownMenu
-        open={dropdownOpen}
-        onOpenChange={setDropdownOpen}
-        modal={false}
-      >
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen} modal={false}>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-x-1.5 rounded-md p-2 hover:bg-gray-100 focus:outline-none hover:dark:bg-gray-900">
             <span
@@ -162,18 +143,12 @@ export const WorkspacesDropdownMobile = () => {
             >
               RA
             </span>
-            <RiArrowRightSLine
-              className="size-4 shrink-0 text-gray-500"
-              aria-hidden="true"
-            />
+            <RiArrowRightSLine className="size-4 shrink-0 text-gray-500" aria-hidden="true" />
             <div className="flex w-full items-center justify-between gap-x-3 truncate">
               <p className="truncate whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-50">
                 Retail analytics
               </p>
-              <RiExpandUpDownLine
-                className="size-4 shrink-0 text-gray-500"
-                aria-hidden="true"
-              />
+              <RiExpandUpDownLine className="size-4 shrink-0 text-gray-500" aria-hidden="true" />
             </div>
           </button>
         </DropdownMenuTrigger>
@@ -189,9 +164,7 @@ export const WorkspacesDropdownMobile = () => {
           }}
         >
           <DropdownMenuGroup>
-            <DropdownMenuLabel>
-              Workspaces ({workspaces.length})
-            </DropdownMenuLabel>
+            <DropdownMenuLabel>Workspaces ({workspaces.length})</DropdownMenuLabel>
             {workspaces.map((workspace) => (
               <DropdownMenuItem key={workspace.value}>
                 <div className="flex w-full items-center gap-x-2.5">
@@ -205,12 +178,8 @@ export const WorkspacesDropdownMobile = () => {
                     {workspace.initials}
                   </span>
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                      {workspace.name}
-                    </p>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      {workspace.role}
-                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-50">{workspace.name}</p>
+                    <p className="text-xs text-gray-700 dark:text-gray-300">{workspace.role}</p>
                   </div>
                 </div>
               </DropdownMenuItem>
